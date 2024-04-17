@@ -1,5 +1,10 @@
+import { Helmet } from 'react-helmet-async';
+
 export const Login = () => (
   <main className="page__main page__main--login">
+    <Helmet>
+      <title>Авторизация</title>
+    </Helmet>
     <div className="page__login-container container">
       <section className="login">
         <h1 className="login__title">Sign in</h1>
