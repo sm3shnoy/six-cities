@@ -23,4 +23,6 @@ export const CITIES = [
     id: 'dusseldorf',
     name: 'Dusseldorf',
   },
-];
+] as const;
+
+export type CityName = (typeof CITIES)[number]['name'];

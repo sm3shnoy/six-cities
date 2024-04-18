@@ -1,37 +1,51 @@
+import cn from 'classnames';
+import { Link, useLocation } from 'react-router-dom';
 import { TPreviewOffer } from '../../types/preview-offer';
 import { FavoriteButton } from '../favorite-button';
 import { PremiumBadge } from '../premium-badge';
 import { Price } from '../price/price';
 import { Rating } from '../rating';
+import { AppRoutes } from '../../const';
+import { useLayoutState } from './use-layout-state';
 
 type TCard = {
   offer: TPreviewOffer;
 };
 
-export const Card = ({ offer }: TCard) => (
-  <article className="cities__card place-card">
-    {offer.isFavorite && <PremiumBadge extraClassName="place-card__mark" />}
-    <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href="#">
-        <img
-          className="place-card__image"
-          src={offer.previewImage}
-          width={260}
-          height={200}
-          alt="Place image"
-        />
-      </a>
-    </div>
-    <div className="place-card__info">
-      <div className="place-card__price-wrapper">
-        <Price bemBlock="place-card" price={120} />
-        <FavoriteButton blockBem="place-card" width={18} height={19} />
+export const Card = ({ offer }: TCard) => {
+  const { pathname } = useLocation();
+  const { cardClassName, cardInfoClassName } = useLayoutState(pathname);
+
+  return (
+    <Link
+      to={`${AppRoutes.Offer}/${offer.id}`}
+      className={`${cardClassName}__card place-card`}
+    >
+      {offer.isFavorite && <PremiumBadge extraClassName="place-card__mark" />}
+      <div
+        className={`${cardClassName}__image-wrapper place-card__image-wrapper`}
+      >
+        <div>
+          <img
+            className="place-card__image"
+            src={offer.previewImage}
+            width={260}
+            height={200}
+            alt="Place image"
+          />
+        </div>
       </div>
-      <Rating bemBlock="place-card" rating={offer.rating} isOnlyStars />
-      <h2 className="place-card__name">
-        <a href="#">{offer.title}</a>
-      </h2>
-      <p className="place-card__type">{offer.type}</p>
-    </div>
-  </article>
-);
+      <div className={cn(cardInfoClassName, 'place-card__info')}>
+        <div className="place-card__price-wrapper">
+          <Price bemBlock="place-card" price={120} />
+          <FavoriteButton blockBem="place-card" width={18} height={19} />
+        </div>
+        <Rating bemBlock="place-card" rating={offer.rating} isOnlyStars />
+        <h2 className="place-card__name">
+          <p>{offer.title}</p>
+        </h2>
+        <p className="place-card__type">{offer.type}</p>
+      </div>
+    </Link>
+  );
+};
