@@ -38,7 +38,7 @@ export const Card = ({ offer }: TCard) => {
       </div>
       <div className={cn(cardInfoClassName, 'place-card__info')}>
         <div className="place-card__price-wrapper">
-          <Price bemBlock="place-card" price={120} />
+          <Price bemBlock="place-card" price={offer.price} />
           <FavoriteButton blockBem="place-card" width={18} height={19} />
         </div>
         <Rating bemBlock="place-card" rating={offer.rating} isOnlyStars />
