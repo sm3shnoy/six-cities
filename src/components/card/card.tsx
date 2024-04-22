@@ -14,7 +14,8 @@ type TCard = {
 
 export const Card = ({ offer }: TCard) => {
   const { pathname } = useLocation();
-  const { cardClassName, cardInfoClassName } = useLayoutState(pathname);
+  const { cardClassName, cardInfoClassName, previewSize } =
+    useLayoutState(pathname);
 
   return (
     <Link
@@ -29,8 +30,8 @@ export const Card = ({ offer }: TCard) => {
           <img
             className="place-card__image"
             src={offer.previewImage}
-            width={260}
-            height={200}
+            width={previewSize.width}
+            height={previewSize.height}
             alt="Place image"
           />
         </div>
