@@ -18,7 +18,7 @@ const App = ({ offers }: { offers: TPreviewOffer[] }) => (
           path={AppRoutes.Favorites}
           element={
             <PrivateRoute>
-              <FavoritesPage />
+              <FavoritesPage offers={offers} />
             </PrivateRoute>
           }
         />
@@ -30,7 +30,10 @@ const App = ({ offers }: { offers: TPreviewOffer[] }) => (
             </PrivateRoute>
           }
         />
-        <Route path={AppRoutes.OfferId} element={<OfferPage />} />
+        <Route
+          path={AppRoutes.OfferId}
+          element={<OfferPage offers={offers} />}
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
