@@ -34,7 +34,9 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
                 <SortingList />
                 <CardList offers={offers} />
               </section>
-              <Map />
+              <div className="cities__right-section">
+                <Map extraClassName="cities__map" />
+              </div>
             </>
           ) : (
             <MainEmpty />

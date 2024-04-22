@@ -1,5 +1,5 @@
-export const Map = () => (
-  <div className="cities__right-section">
-    <section className="cities__map map"></section>
-  </div>
+import cn from 'classnames';
+
+export const Map = ({ extraClassName }: { extraClassName?: string }) => (
+  <section className={cn(extraClassName, 'map')}></section>
 );

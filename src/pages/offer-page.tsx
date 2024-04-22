@@ -10,6 +10,12 @@ import { Rating } from '../components/rating';
 import { TOffer } from '../types/offer';
 import NotFoundPage from './not-found-page';
 import { ReviewForm } from '../components/review-form';
+import { ReviewsList } from '../components/reviews-list';
+import { Map } from '../components/map';
+import { InsideList } from '../components/inside-list';
+import { FEATURES } from '../const';
+import { CardList } from '../components/card-list';
+import { TPreviewOffer } from '../types/preview-offer';
 
 const api = async (id?: string) => {
   try {
@@ -17,10 +23,10 @@ const api = async (id?: string) => {
       `https://15.design.htmlacademy.pro/six-cities/offers/${id}`
     ).then((res) => res.json() as Promise<TOffer>);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-ignore-next-line
     if (response.errorType) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // @ts-ignore-next-line
       throw new Error(response.message as string);
     }
 
@@ -31,7 +37,8 @@ const api = async (id?: string) => {
     }
   }
 };
-export const OfferPage = () => {
+
+export const OfferPage = ({ offers }: { offers: TPreviewOffer[] }) => {
   const { id } = useParams();
   const [offer, setOffer] = useState<TOffer>();
 
@@ -70,18 +77,7 @@ export const OfferPage = () => {
             <Price bemBlock="offer" price={offer.price} />
             <div className="offer__inside">
               <h2 className="offer__inside-title">What&apos;s inside</h2>
-              <ul className="offer__inside-list">
-                <li className="offer__inside-item">Wi-Fi</li>
-                <li className="offer__inside-item">Washing machine</li>
-                <li className="offer__inside-item">Towels</li>
-                <li className="offer__inside-item">Heating</li>
-                <li className="offer__inside-item">Coffee machine</li>
-                <li className="offer__inside-item">Baby seat</li>
-                <li className="offer__inside-item">Kitchen</li>
-                <li className="offer__inside-item">Dishwasher</li>
-                <li className="offer__inside-item">Cabel TV</li>
-                <li className="offer__inside-item">Fridge</li>
-              </ul>
+              <InsideList features={FEATURES} />
             </div>
             <div className="offer__host">
               <h2 className="offer__host-title">Meet the host</h2>
@@ -108,44 +104,21 @@ export const OfferPage = () => {
               <h2 className="reviews__title">
                 Reviews · <span className="reviews__amount">1</span>
               </h2>
-              <ul className="reviews__list">
-                <li className="reviews__item">
-                  <div className="reviews__user user">
-                    <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                      <img
-                        className="reviews__avatar user__avatar"
-                        src="img/avatar-max.jpg"
-                        width={54}
-                        height={54}
-                        alt="Reviews avatar"
-                      />
-                    </div>
-                    <span className="reviews__user-name">Max</span>
-                  </div>
-                  <div className="reviews__info">
-                    <div className="reviews__rating rating">
-                      <div className="reviews__stars rating__stars">
-                        <span style={{ width: '80%' }} />
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <p className="reviews__text">
-                      A quiet cozy and picturesque that hides behind a a river
-                      by the unique lightness of Amsterdam. The building is
-                      green and from 18th century.
-                    </p>
-                    <time className="reviews__time" dateTime="2019-04-24">
-                      April 2019
-                    </time>
-                  </div>
-                </li>
-              </ul>
+              <ReviewsList />
               <ReviewForm />
             </section>
           </div>
         </div>
-        <section className="offer__map map" />
+        <Map extraClassName="offer__map" />
       </section>
+      <div className="container">
+        <section className="near-places places">
+          <h2 className="near-places__title">
+            Other places in the neighbourhood
+          </h2>
+          <CardList offers={offers.slice(0, 3)} />
+        </section>
+      </div>
     </main>
   ) : (
     <NotFoundPage />
