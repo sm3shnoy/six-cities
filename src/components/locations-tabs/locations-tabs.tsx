@@ -1,6 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import cn from 'classnames';
-import { CITIES } from './const';
+import { CITIES } from '../../const';
 
 export const LocationsTabs = () => {
   const [activeCity, setActiveCity] = useState('Paris');
