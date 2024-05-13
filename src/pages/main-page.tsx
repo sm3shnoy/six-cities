@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import cn from 'classnames';
 import { CardList } from '../components/card-list';
 import { LocationsTabs } from '../components/locations-tabs';
@@ -6,8 +7,12 @@ import { SortingList } from '../components/sorting-list';
 import { TPreviewOffer } from '../types/preview-offer';
 import { MainEmpty } from '../components/main-empty';
 import { Helmet } from 'react-helmet-async';
+import { CITIES } from '../const';
 
 const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
+  const [selectedPoint, setSelectedPoint] = useState<TPreviewOffer | null>(
+    null
+  );
   const isOffersEmpty = offers.length < 1;
 
   return (
@@ -32,10 +37,18 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
                   {offers.length} places to stay in Amsterdam
                 </b>
                 <SortingList />
-                <CardList offers={offers} />
+                <CardList
+                  offers={offers}
+                  pointHoverHandler={setSelectedPoint}
+                />
               </section>
               <div className="cities__right-section">
-                <Map extraClassName="cities__map" />
+                <Map
+                  extraClassName="cities__map"
+                  currentCity={CITIES[0]}
+                  points={offers}
+                  selectedPoint={selectedPoint}
+                />
               </div>
             </>
           ) : (
