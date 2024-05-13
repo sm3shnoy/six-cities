@@ -10,9 +10,10 @@ import { useLayoutState } from './use-layout-state';
 
 type TCard = {
   offer: TPreviewOffer;
+  onCardHover: (offer: TPreviewOffer | null) => void;
 };
 
-export const Card = ({ offer }: TCard) => {
+export const Card = ({ offer, onCardHover }: TCard) => {
   const { pathname } = useLocation();
   const { cardClassName, cardInfoClassName, previewSize } =
     useLayoutState(pathname);
@@ -21,6 +22,8 @@ export const Card = ({ offer }: TCard) => {
     <Link
       to={`${AppRoutes.Offer}/${offer.id}`}
       className={`${cardClassName}__card place-card`}
+      onMouseOver={() => onCardHover(offer)}
+      onMouseLeave={() => onCardHover(null)}
     >
       {offer.isFavorite && <PremiumBadge extraClassName="place-card__mark" />}
       <div
