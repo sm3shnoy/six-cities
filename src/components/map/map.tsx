@@ -5,9 +5,18 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { Marker, layerGroup } from 'leaflet';
 import { TPreviewOffer } from '../../types/preview-offer';
-import { TCity } from '../../types/city';
 import Pin from './assets/pin.svg';
 import PinActive from './assets/pin-active.svg';
+
+type TCityMap = {
+  id: string;
+  name: string;
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+};
 
 export const Map = ({
   extraClassName,
@@ -16,7 +25,7 @@ export const Map = ({
   selectedPoint,
 }: {
   extraClassName?: string;
-  currentCity: TCity;
+  currentCity: TCityMap;
   points: TPreviewOffer[];
   selectedPoint: TPreviewOffer | null;
 }) => {
