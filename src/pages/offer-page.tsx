@@ -13,7 +13,7 @@ import { ReviewForm } from '../components/review-form';
 import { ReviewsList } from '../components/reviews-list';
 import { Map } from '../components/map';
 import { InsideList } from '../components/inside-list';
-import { FEATURES } from '../const';
+import { CITIES, FEATURES } from '../const';
 import { CardList } from '../components/card-list';
 import { TPreviewOffer } from '../types/preview-offer';
 
@@ -41,6 +41,9 @@ const api = async (id?: string) => {
 export const OfferPage = ({ offers }: { offers: TPreviewOffer[] }) => {
   const { id } = useParams();
   const [offer, setOffer] = useState<TOffer>();
+  const [selectedPoint, setSelectedPoint] = useState<TPreviewOffer | null>(
+    null
+  );
 
   useEffect(() => {
     api(id).then((res) => {
@@ -109,14 +112,22 @@ export const OfferPage = ({ offers }: { offers: TPreviewOffer[] }) => {
             </section>
           </div>
         </div>
-        <Map extraClassName="offer__map" />
+        <Map
+          extraClassName="offer__map"
+          points={offers}
+          currentCity={CITIES[0]}
+          selectedPoint={selectedPoint}
+        />
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">
             Other places in the neighbourhood
           </h2>
-          <CardList offers={offers.slice(0, 3)} />
+          <CardList
+            offers={offers.slice(0, 3)}
+            pointHoverHandler={setSelectedPoint}
+          />
         </section>
       </div>
     </main>
