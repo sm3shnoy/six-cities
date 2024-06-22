@@ -18,6 +18,18 @@ type TCityMap = {
   };
 };
 
+const DEFAULT_PIN = leaflet.icon({
+  iconUrl: Pin,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+});
+
+const ACTIVE_PIN = leaflet.icon({
+  iconUrl: PinActive,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+});
+
 export const Map = ({
   extraClassName,
   currentCity,
@@ -31,18 +43,6 @@ export const Map = ({
 }) => {
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
-
-  const DEFAULT_PIN = leaflet.icon({
-    iconUrl: Pin,
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
-  });
-
-  const ACTIVE_PIN = leaflet.icon({
-    iconUrl: PinActive,
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
-  });
 
   useEffect(() => {
     if (map) {
