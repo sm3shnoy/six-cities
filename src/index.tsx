@@ -5,6 +5,8 @@ import { TPreviewOffer } from './types/preview-offer';
 import { HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,9 +24,11 @@ const offers: TPreviewOffer[] = await api();
 
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <App offers={offers} />
-      <ToastContainer position="bottom-left" />
-    </HelmetProvider>
+    <Provider store={store}>
+      <HelmetProvider>
+        <App offers={offers} />
+        <ToastContainer position="bottom-left" />
+      </HelmetProvider>
+    </Provider>
   </React.StrictMode>
 );

@@ -7,42 +7,36 @@ import { Marker, layerGroup } from 'leaflet';
 import { TPreviewOffer } from '../../types/preview-offer';
 import Pin from './assets/pin.svg';
 import PinActive from './assets/pin-active.svg';
+import { CITIES } from '../../const';
+import { useAppSelector } from '../../store/hooks';
+import { offersSelectors } from '../../store/slices/offers';
 
-type TCityMap = {
-  id: string;
-  name: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
-};
+const DEFAULT_PIN = leaflet.icon({
+  iconUrl: Pin,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+});
+
+const ACTIVE_PIN = leaflet.icon({
+  iconUrl: PinActive,
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
+});
 
 export const Map = ({
   extraClassName,
   currentCity,
   points,
-  selectedPoint,
 }: {
   extraClassName?: string;
-  currentCity: TCityMap;
+  currentCity: string;
   points: TPreviewOffer[];
-  selectedPoint: TPreviewOffer | null;
 }) => {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, currentCity);
-
-  const DEFAULT_PIN = leaflet.icon({
-    iconUrl: Pin,
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
-  });
-
-  const ACTIVE_PIN = leaflet.icon({
-    iconUrl: PinActive,
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
-  });
+  const cityInfo =
+    CITIES.find((city) => city.name === currentCity) || CITIES[0];
+  const map = useMap(mapRef, cityInfo);
+  const selectedPoint = useAppSelector(offersSelectors.activeId);
 
   useEffect(() => {
     if (map) {
@@ -55,7 +49,7 @@ export const Map = ({
 
         marker
           .setIcon(
-            selectedPoint && point.id === selectedPoint?.id
+            selectedPoint && point.id === selectedPoint
               ? ACTIVE_PIN
               : DEFAULT_PIN
           )

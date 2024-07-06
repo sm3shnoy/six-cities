@@ -7,13 +7,32 @@ import { SortingList } from '../components/sorting-list';
 import { TPreviewOffer } from '../types/preview-offer';
 import { MainEmpty } from '../components/main-empty';
 import { Helmet } from 'react-helmet-async';
-import { CITIES } from '../const';
+import { useAppSelector } from '../store/hooks';
+import { SortOption } from '../const';
+import { offersSelectors } from '../store/slices/offers';
 
 const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
-  const [selectedPoint, setSelectedPoint] = useState<TPreviewOffer | null>(
-    null
-  );
+  const [currentSort, setSort] = useState(SortOption.Popular);
+  const currentCity = useAppSelector(offersSelectors.selectCity);
+
   const isOffersEmpty = offers.length < 1;
+  const currentOffers = offers.filter(
+    (offer) => offer.city.name === currentCity
+  );
+
+  let sortedOffers = currentOffers;
+
+  switch (currentSort) {
+    case SortOption.HighToLow:
+      sortedOffers = [...currentOffers].sort((a, b) => b.price - a.price);
+      break;
+    case SortOption.LowToHigh:
+      sortedOffers = [...currentOffers].sort((a, b) => a.price - b.price);
+      break;
+    case SortOption.TopRated:
+      sortedOffers = [...currentOffers].sort((a, b) => b.rating - a.rating);
+      break;
+  }
 
   return (
     <main className="page__main page__main--index">
@@ -34,20 +53,16 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">
-                  {offers.length} places to stay in Amsterdam
+                  {sortedOffers.length} places to stay in {currentCity}
                 </b>
-                <SortingList />
-                <CardList
-                  offers={offers}
-                  pointHoverHandler={setSelectedPoint}
-                />
+                <SortingList current={currentSort} setter={setSort} />
+                <CardList offers={sortedOffers} />
               </section>
               <div className="cities__right-section">
                 <Map
                   extraClassName="cities__map"
-                  currentCity={CITIES[0]}
-                  points={offers}
-                  selectedPoint={selectedPoint}
+                  currentCity={currentCity}
+                  points={sortedOffers}
                 />
               </div>
             </>

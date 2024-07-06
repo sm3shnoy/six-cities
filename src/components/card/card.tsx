@@ -7,14 +7,16 @@ import { Price } from '../price/price';
 import { Rating } from '../rating';
 import { AppRoutes } from '../../const';
 import { useLayoutState } from './use-layout-state';
+import { useAppDispatch } from '../../store/hooks';
+import { offersActions } from '../../store/slices/offers';
 
 type TCard = {
   offer: TPreviewOffer;
-  onCardHover: (offer: TPreviewOffer | null) => void;
 };
 
-export const Card = ({ offer, onCardHover }: TCard) => {
+export const Card = ({ offer }: TCard) => {
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
   const { cardClassName, cardInfoClassName, previewSize } =
     useLayoutState(pathname);
 
@@ -22,8 +24,8 @@ export const Card = ({ offer, onCardHover }: TCard) => {
     <Link
       to={`${AppRoutes.Offer}/${offer.id}`}
       className={`${cardClassName}__card place-card`}
-      onMouseOver={() => onCardHover(offer)}
-      onMouseLeave={() => onCardHover(null)}
+      onMouseOver={() => dispatch(offersActions.setActiveId(offer.id))}
+      onMouseLeave={() => dispatch(offersActions.setActiveId(undefined))}
     >
       {offer.isFavorite && <PremiumBadge extraClassName="place-card__mark" />}
       <div
