@@ -1,15 +1,18 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent } from 'react';
 import cn from 'classnames';
-import { CITIES } from '../../const';
+import { CITIES, CityName } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { offersActions, offersSelectors } from '../../store/slices/offers';
 
 export const LocationsTabs = () => {
-  const [activeCity, setActiveCity] = useState('Paris');
+  const currentCity = useAppSelector(offersSelectors.selectCity);
+  const dispatch = useAppDispatch();
 
   const onCityChange = (evt: MouseEvent<HTMLElement>) => {
     const target = evt.target as HTMLElement;
 
     if (target.closest('.locations__item')?.tagName === 'LI') {
-      setActiveCity(target.textContent as string);
+      dispatch(offersActions.changeCity(target.textContent as CityName));
     }
   };
 
@@ -22,7 +25,7 @@ export const LocationsTabs = () => {
               <a
                 className={cn(
                   'locations__item-link tabs__item',
-                  activeCity === city.name && 'tabs__item--active'
+                  currentCity === city.name && 'tabs__item--active'
                 )}
                 href="#"
               >
