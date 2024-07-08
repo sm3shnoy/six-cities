@@ -6,6 +6,10 @@ export enum AppRoutes {
   OfferId = '/offers/:id',
 }
 
+export enum APIRoutes {
+  Offers = '/offers',
+}
+
 export const FEATURES = [
   'Wi-Fi',
   'Washing machine',
