@@ -4,17 +4,16 @@ import { CardList } from '../components/card-list';
 import { LocationsTabs } from '../components/locations-tabs';
 import { Map } from '../components/map';
 import { SortingList } from '../components/sorting-list';
-import { TPreviewOffer } from '../types/preview-offer';
 import { MainEmpty } from '../components/main-empty';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../store/hooks';
 import { SortOption } from '../const';
 import { offersSelectors } from '../store/slices/offers';
 
-const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
+const MainPage = () => {
   const [currentSort, setSort] = useState(SortOption.Popular);
   const currentCity = useAppSelector(offersSelectors.selectCity);
-
+  const offers = useAppSelector(offersSelectors.offers);
   const isOffersEmpty = offers.length < 1;
   const currentOffers = offers.filter(
     (offer) => offer.city.name === currentCity
@@ -59,11 +58,7 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
                 <CardList offers={sortedOffers} />
               </section>
               <div className="cities__right-section">
-                <Map
-                  extraClassName="cities__map"
-                  currentCity={currentCity}
-                  points={sortedOffers}
-                />
+                <Map extraClassName="cities__map" points={sortedOffers} />
               </div>
             </>
           ) : (

@@ -13,9 +13,10 @@ import { ReviewForm } from '../components/review-form';
 import { ReviewsList } from '../components/reviews-list';
 import { Map } from '../components/map';
 import { InsideList } from '../components/inside-list';
-import { CITIES, FEATURES } from '../const';
+import { FEATURES } from '../const';
 import { CardList } from '../components/card-list';
-import { TPreviewOffer } from '../types/preview-offer';
+import { useAppSelector } from '../store/hooks';
+import { offersSelectors } from '../store/slices/offers';
 
 const api = async (id?: string) => {
   try {
@@ -38,12 +39,10 @@ const api = async (id?: string) => {
   }
 };
 
-export const OfferPage = ({ offers }: { offers: TPreviewOffer[] }) => {
+export const OfferPage = () => {
   const { id } = useParams();
   const [offer, setOffer] = useState<TOffer>();
-  const [selectedPoint, setSelectedPoint] = useState<TPreviewOffer | null>(
-    null
-  );
+  const offers = useAppSelector(offersSelectors.offers);
 
   useEffect(() => {
     api(id).then((res) => {
@@ -112,22 +111,14 @@ export const OfferPage = ({ offers }: { offers: TPreviewOffer[] }) => {
             </section>
           </div>
         </div>
-        <Map
-          extraClassName="offer__map"
-          points={offers}
-          currentCity={CITIES[0]}
-          selectedPoint={selectedPoint}
-        />
+        <Map extraClassName="offer__map" points={offers} />
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">
             Other places in the neighbourhood
           </h2>
-          <CardList
-            offers={offers.slice(0, 3)}
-            pointHoverHandler={setSelectedPoint}
-          />
+          <CardList offers={offers.slice(0, 3)} />
         </section>
       </div>
     </main>

@@ -1,9 +1,11 @@
 import { Helmet } from 'react-helmet-async';
-import { TPreviewOffer } from '../types/preview-offer';
 import { FavoritesList } from '../components/favorites-list';
 import { getFavoriteOffersByCity } from '../utils';
+import { useAppSelector } from '../store/hooks';
+import { offersSelectors } from '../store/slices/offers';
 
-export const FavoritesPage = ({ offers }: { offers: TPreviewOffer[] }) => {
+export const FavoritesPage = () => {
+  const offers = useAppSelector(offersSelectors.offers);
   const offersByCity = getFavoriteOffersByCity(offers);
 
   return offersByCity ? (
