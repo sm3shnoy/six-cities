@@ -2,14 +2,16 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { CITIES, CityName } from '../../const';
 import { TPreviewOffer } from '../../types/preview-offer';
 
-type OffersState = {
+export type OffersState = {
   currentCity: CityName;
   activeId?: TPreviewOffer['id'];
+  offers: TPreviewOffer[];
 };
 
 const initialState: OffersState = {
   currentCity: CITIES[0].name,
   activeId: undefined,
+  offers: [],
 };
 
 const offersSlice = createSlice({
@@ -25,10 +27,14 @@ const offersSlice = createSlice({
     ) => {
       state.activeId = action.payload;
     },
+    loadOffers: (state, action: PayloadAction<TPreviewOffer[]>) => {
+      state.offers = action.payload;
+    },
   },
   selectors: {
     activeId: (state) => state.activeId,
     selectCity: (state) => state.currentCity,
+    offers: (state) => state.offers,
   },
 });
 
