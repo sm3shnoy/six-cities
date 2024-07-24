@@ -7,8 +7,9 @@ import { SortingList } from '../components/sorting-list';
 import { MainEmpty } from '../components/main-empty';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../store/hooks';
-import { SortOption } from '../const';
+import { RequestStatus, SortOption } from '../const';
 import { offersSelectors } from '../store/slices/offers';
+import { Spinner } from '../components/spinner';
 
 const MainPage = () => {
   const [currentSort, setSort] = useState(SortOption.Popular);
@@ -18,6 +19,7 @@ const MainPage = () => {
   const currentOffers = offers.filter(
     (offer) => offer.city.name === currentCity
   );
+  const status = useAppSelector(offersSelectors.status);
 
   let sortedOffers = currentOffers;
 
@@ -31,6 +33,10 @@ const MainPage = () => {
     case SortOption.TopRated:
       sortedOffers = [...currentOffers].sort((a, b) => b.rating - a.rating);
       break;
+  }
+
+  if (status === RequestStatus.Loading) {
+    return <Spinner />;
   }
 
   return (
