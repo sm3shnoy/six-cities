@@ -6,7 +6,7 @@ type TRatingProps = {
 
 export const Rating = ({ rating, bemBlock, isOnlyStars }: TRatingProps) => {
   const MAX_STARS = 5;
-  const displayedRating = (100 * MAX_STARS) / rating;
+  const displayedRating = (100 / MAX_STARS) * rating;
 
   return (
     <div className={`${bemBlock}__rating rating`}>
@@ -15,7 +15,9 @@ export const Rating = ({ rating, bemBlock, isOnlyStars }: TRatingProps) => {
         <span className="visually-hidden">Rating</span>
       </div>
       {!isOnlyStars && (
-        <span className={`${bemBlock}__rating-value rating__value`}>4.8</span>
+        <span className={`${bemBlock}__rating-value rating__value`}>
+          {rating}
+        </span>
       )}
     </div>
   );
