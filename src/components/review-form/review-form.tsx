@@ -1,9 +1,42 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { RatingInput } from '../rating-input';
 import { RATING } from '../rating-input/const';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { reviewsActions, reviewsSelectors } from '../../store/slices/reviews';
+import { useParams } from 'react-router-dom';
+import { RequestStatus } from '../../const';
+import { Spinner } from '../spinner';
+import { toast } from 'react-toastify';
 
 export const ReviewForm = () => {
   const [formData, setFormData] = useState({ rating: 0, comment: '' });
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const status = useAppSelector(reviewsSelectors.status);
+  const isDisabled = formData.comment.length < 50;
+
+  const formSubmitHandler = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    dispatch(
+      reviewsActions.postReviewAction({
+        offerId: id as string,
+        body: { comment: formData.comment, rating: formData.rating },
+      })
+    );
+
+    if (status === RequestStatus.Loading) {
+      return <Spinner />;
+    }
+
+    if (status === RequestStatus.Success) {
+      setFormData({ rating: 0, comment: '' });
+      toast('Ваш комментарий успешно отправлен!');
+    }
+
+    if (status === RequestStatus.Failed) {
+      toast('Ваш комментарий не отправлен!');
+    }
+  };
 
   const ratingChangeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -20,7 +53,12 @@ export const ReviewForm = () => {
   };
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form
+      className="reviews__form form"
+      onSubmit={formSubmitHandler}
+      action="#"
+      method="post"
+    >
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
@@ -52,7 +90,7 @@ export const ReviewForm = () => {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled
+          disabled={isDisabled}
         >
           Submit
         </button>
