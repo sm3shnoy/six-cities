@@ -8,6 +8,10 @@ export enum AppRoutes {
 
 export enum APIRoutes {
   Offers = '/offers',
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+  Favorites = '/favorite',
 }
 
 export const FEATURES = [
@@ -95,3 +99,18 @@ export enum SortOption {
 }
 
 export type CityName = (typeof CITIES)[number]['name'];
+
+export const TIMEOUT_SHOW_ERROR = 2000;
+
+export const enum RequestStatus {
+  Idle,
+  Loading,
+  Success,
+  Failed,
+}
+
+export enum AuthorizationStatus {
+  Unknown = 'UNKNOWN',
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+}
