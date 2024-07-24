@@ -1,14 +1,30 @@
 import { Helmet } from 'react-helmet-async';
 import { FavoritesList } from '../components/favorites-list';
 import { getFavoriteOffersByCity } from '../utils';
-import { useAppSelector } from '../store/hooks';
-import { offersSelectors } from '../store/slices/offers';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import {
+  favoritesActions,
+  favoritesSelectors,
+} from '../store/slices/favorites';
+import { useEffect } from 'react';
+import { RequestStatus } from '../const';
+import { Spinner } from '../components/spinner';
 
 export const FavoritesPage = () => {
-  const offers = useAppSelector(offersSelectors.offers);
-  const offersByCity = getFavoriteOffersByCity(offers);
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector(favoritesSelectors.offers);
+  const status = useAppSelector(favoritesSelectors.status);
+  const offersByCity = favorites && getFavoriteOffersByCity(favorites);
 
-  return offersByCity ? (
+  useEffect(() => {
+    dispatch(favoritesActions.fetchFavoritesAction());
+  }, [dispatch]);
+
+  if (status === RequestStatus.Loading) {
+    return <Spinner />;
+  }
+
+  return favorites.length > 0 ? (
     <main className="page__main page__main--favorites">
       <Helmet>
         <title>Избранное</title>
