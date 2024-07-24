@@ -1,7 +1,10 @@
+import { TReviews } from '../../types/reviews';
 import { ReviewsItem } from '../reviews-item';
 
-export const ReviewsList = () => (
+export const ReviewsList = ({ reviews }: { reviews: TReviews[] }) => (
   <ul className="reviews__list">
-    <ReviewsItem />
+    {reviews.map((review) => (
+      <ReviewsItem key={review.id} review={review} />
+    ))}
   </ul>
 );
