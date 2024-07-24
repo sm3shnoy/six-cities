@@ -21,17 +21,16 @@ export const Card = ({ offer }: TCard) => {
     useLayoutState(pathname);
 
   return (
-    <Link
-      to={`${AppRoutes.Offer}/${offer.id}`}
+    <div
       className={`${cardClassName}__card place-card`}
       onMouseOver={() => dispatch(offersActions.setActiveId(offer.id))}
       onMouseLeave={() => dispatch(offersActions.setActiveId(undefined))}
     >
-      {offer.isFavorite && <PremiumBadge extraClassName="place-card__mark" />}
+      {offer.isPremium && <PremiumBadge extraClassName="place-card__mark" />}
       <div
         className={`${cardClassName}__image-wrapper place-card__image-wrapper`}
       >
-        <div>
+        <Link to={`${AppRoutes.Offer}/${offer.id}`}>
           <img
             className="place-card__image"
             src={offer.previewImage}
@@ -39,12 +38,18 @@ export const Card = ({ offer }: TCard) => {
             height={previewSize.height}
             alt="Place image"
           />
-        </div>
+        </Link>
       </div>
       <div className={cn(cardInfoClassName, 'place-card__info')}>
         <div className="place-card__price-wrapper">
           <Price bemBlock="place-card" price={offer.price} />
-          <FavoriteButton blockBem="place-card" width={18} height={19} />
+          <FavoriteButton
+            blockBem="place-card"
+            width={18}
+            height={19}
+            offerId={offer.id}
+            isFavorite={offer.isFavorite}
+          />
         </div>
         <Rating bemBlock="place-card" rating={offer.rating} isOnlyStars />
         <h2 className="place-card__name">
@@ -52,6 +57,6 @@ export const Card = ({ offer }: TCard) => {
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
-    </Link>
+    </div>
   );
 };

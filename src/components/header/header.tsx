@@ -1,3 +1,4 @@
+import { useAuth } from '../../hooks/use-auth';
 import { HeaderAuthUser } from '../header-auth-user';
 import { HeaderLogo } from '../header-logo';
 import { HeaderNoAuthUser } from '../header-noauth-user';
@@ -10,22 +11,26 @@ type THeaderProps = {
 export const Header = ({
   activeLogoClassName,
   shouldRenderUser,
-}: THeaderProps) => (
-  <header className="header">
-    <div className="container">
-      <div className="header__wrapper">
-        <div className="header__left">
-          <HeaderLogo activeLogoClassName={activeLogoClassName} />
+}: THeaderProps) => {
+  const isAuth = useAuth();
+
+  return (
+    <header className="header">
+      <div className="container">
+        <div className="header__wrapper">
+          <div className="header__left">
+            <HeaderLogo activeLogoClassName={activeLogoClassName} />
+          </div>
+          {shouldRenderUser && (
+            <nav className="header__nav">
+              <ul className="header__nav-list">
+                {isAuth && <HeaderAuthUser />}
+                {!isAuth && <HeaderNoAuthUser />}
+              </ul>
+            </nav>
+          )}
         </div>
-        {shouldRenderUser && (
-          <nav className="header__nav">
-            <ul className="header__nav-list">
-              {shouldRenderUser && <HeaderAuthUser />}
-              {!shouldRenderUser && <HeaderNoAuthUser />}
-            </ul>
-          </nav>
-        )}
       </div>
-    </div>
-  </header>
-);
+    </header>
+  );
+};

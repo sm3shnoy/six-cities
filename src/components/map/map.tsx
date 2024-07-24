@@ -25,13 +25,12 @@ const ACTIVE_PIN = leaflet.icon({
 
 export const Map = ({
   extraClassName,
-  currentCity,
   points,
 }: {
   extraClassName?: string;
-  currentCity: string;
   points: TPreviewOffer[];
 }) => {
+  const currentCity = useAppSelector(offersSelectors.selectCity);
   const mapRef = useRef(null);
   const cityInfo =
     CITIES.find((city) => city.name === currentCity) || CITIES[0];

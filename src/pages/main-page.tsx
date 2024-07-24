@@ -4,21 +4,22 @@ import { CardList } from '../components/card-list';
 import { LocationsTabs } from '../components/locations-tabs';
 import { Map } from '../components/map';
 import { SortingList } from '../components/sorting-list';
-import { TPreviewOffer } from '../types/preview-offer';
 import { MainEmpty } from '../components/main-empty';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../store/hooks';
-import { SortOption } from '../const';
+import { RequestStatus, SortOption } from '../const';
 import { offersSelectors } from '../store/slices/offers';
+import { Spinner } from '../components/spinner';
 
-const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
+const MainPage = () => {
   const [currentSort, setSort] = useState(SortOption.Popular);
   const currentCity = useAppSelector(offersSelectors.selectCity);
-
+  const offers = useAppSelector(offersSelectors.offers);
   const isOffersEmpty = offers.length < 1;
   const currentOffers = offers.filter(
     (offer) => offer.city.name === currentCity
   );
+  const status = useAppSelector(offersSelectors.status);
 
   let sortedOffers = currentOffers;
 
@@ -32,6 +33,10 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
     case SortOption.TopRated:
       sortedOffers = [...currentOffers].sort((a, b) => b.rating - a.rating);
       break;
+  }
+
+  if (status === RequestStatus.Loading) {
+    return <Spinner />;
   }
 
   return (
@@ -59,11 +64,7 @@ const MainPage = ({ offers }: { offers: TPreviewOffer[] }) => {
                 <CardList offers={sortedOffers} />
               </section>
               <div className="cities__right-section">
-                <Map
-                  extraClassName="cities__map"
-                  currentCity={currentCity}
-                  points={sortedOffers}
-                />
+                <Map extraClassName="cities__map" points={sortedOffers} />
               </div>
             </>
           ) : (
